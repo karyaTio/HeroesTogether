@@ -1,0 +1,4 @@
+bahasa = INDONESIA/ENGLISH
+
+rule 1 :
+Nama dari input form, controller dan model samakan dengan colom database

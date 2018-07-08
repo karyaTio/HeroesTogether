@@ -1,0 +1,11 @@
+cara inisialisasi git
+git init
+git remote add origin https://github.com/karyaTio/HeroesTogether
+
+cara push :
+git add .
+git commit -m "Apa fitur yang telah dibuat"
+git push origin master
+
+cara pull :
+git pull
