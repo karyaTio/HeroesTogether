@@ -6,7 +6,9 @@ class Heroes extends CI_Controller {
   }
 
   function index(){
+    $this->load->view('layout/header');
     $this->load->view('heroes/index');
+    $this->load->view('layout/footer');
   }
 
   function heroes_data(){

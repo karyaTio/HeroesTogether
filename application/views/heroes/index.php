@@ -104,7 +104,7 @@
 			var umur = $('textarea[name=umur]');
 			var power = $('textarea[name=power]');
 			var result = '';
-			
+
 			if(hero_name.val()==''){
 				hero_name.parent().parent().addClass('has-error');
 			}else{
@@ -221,7 +221,7 @@
 		function showAllHeroes(){
 			$.ajax({
 				type: 'ajax',
-				url: '<?php echo base_url() ?>heroes/showAllHeroes',
+				url: '<?php echo base_url() ?>heroes/heroes_data',
 				async: false,
 				dataType: 'json',
 				success: function(data){
