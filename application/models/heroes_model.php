@@ -6,6 +6,11 @@ class heroes_model extends CI_Model {
     return $hasil->result();
   }
 
+  function getById($id){
+    $this->db->get('hero');
+    $this->db->where('id', $id);
+  }
+
   function save_hero(){
 
     // Ambil data dari post dan jadikan array
