@@ -100,8 +100,8 @@
 			var data = $('#myForm').serialize();
 			//validate form
 			var hero_name = $('input[name=hero_name]');
-			var real_name = $('textarea[name=real_name]');
-			var umur = $('textarea[name=umur]');
+			var real_name = $('input[name=real_name]');
+			var umur = $('input[name=umur]');
 			var power = $('textarea[name=power]');
 			var result = '';
 
@@ -130,7 +130,7 @@
 				result +='4';
 			}
 
-			if(result=='12'){
+			if(result=='1234'){
 				$.ajax({
 					type: 'ajax',
 					method: 'post',
@@ -164,28 +164,27 @@
 		$('#showdata').on('click', '.item-edit', function(){
 			var id = $(this).attr('data');
 			$('#myModal').modal('show');
-			$('#myModal').find('.modal-title').text('Edit Heroes');
-			$('#myForm').attr('action', '<?php echo base_url() ?>heroes/updateHeroes');
+			$('#myModal').find('.modal-title').text('Edit Employee');
+			$('#myForm').attr('action');
+
 			$.ajax({
-				type: 'ajax',
-				method: 'get',
-				url: '<?php echo base_url() ?>heroes/editHeroes',
-				data: {id: id},
-				async: false,
-				dataType: 'json',
+				url: "<?php echo site_url('heroes/update/') ;?>/"+id,
+				type: "GET",
+				dataType: "JSON",
 				success: function(data){
-					$('input[name=hero_name]').val(data.hero_name);
-					$('textarea[name=real_name]').val(data.real_name);
-					$('textarea[name=umur]').val(data.umur);
-					$('textarea[name=power]').val(data.power);
-					$('input[name=Id]').val(data.id);
+					$('[name="hero_name"]').val(data.hero_name);
+					$('[name="real_name"]').val(data.real_name);
+					$('[name="umur"]').val(data.umur);
+					$('[name="power"]').val(data.power);
+
+					$('#modal_form').modal('show');
+					$('.modal-title').text('Edit Laptop');
 				},
-				error: function(){
-					alert('Could not Edit Data');
+				error: function(jqXHR, textStatus, errorThrown){
+					alert('Error Pengambilan Data Gagal');
 				}
 			});
 		});
-
 		//delete- 
 		$('#showdata').on('click', '.item-delete', function(){
 			var id = $(this).attr('data');
@@ -193,23 +192,14 @@
 			//prevent previous handler - unbind()
 			$('#btnDelete').unbind().click(function(){
 				$.ajax({
-					type: 'ajax',
-					method: 'get',
-					async: false,
-					url: '<?php echo base_url() ?>heroes/deleteHeroes',
-					data:{id:id},
-					dataType: 'json',
-					success: function(response){
-						if(response.success){
-							$('#deleteModal').modal('hide');
-							$('.alert-success').html('Heroes Deleted successfully').fadeIn().delay(4000).fadeOut('slow');
-							showAllHeroes();
-						}else{
-							alert('Error');
-						}
+					url: "<?php echo site_url('heroes/delete_hero') ;?>/"+id,
+					type: "POST",
+					dataType: "JSON",
+					success: function(data) {
+						location.reload();
 					},
-					error: function(){
-						alert('Error deleting');
+					error: function(jqXHR, textStatus, errorThrown){
+					alert('Error Gagal Delete Data');
 					}
 				});
 			});
