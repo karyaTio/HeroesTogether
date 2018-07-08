@@ -11,6 +11,12 @@ class Heroes extends CI_Controller {
     $this->load->view('layout/footer');
   }
 
+  function getById(){
+    $id = $this->get('id');
+    $data = $this->heroes_model->getById($id);
+    echo json_encode($data);
+  }
+
   function heroes_data(){
     $data = $this->heroes_model->heroes_list();
     echo json_encode($data);

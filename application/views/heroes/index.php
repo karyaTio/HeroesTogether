@@ -1,7 +1,7 @@
 <div class="container">
 	<h3>Heroes Lists</h3>
 	<div class="alert alert-success" style="display: none;">
-		
+
 	</div>
 	<button id="btnAdd" class="btn btn-success">Add New</button>
 	<table class="table table-bordered table-responsive" style="margin-top: 20px;">
@@ -16,7 +16,7 @@
 			</tr>
 		</thead>
 		<tbody id="showdata">
-			
+
 		</tbody>
 	</table>
 </div>
@@ -30,7 +30,8 @@
       </div>
       <div class="modal-body">
         	<form id="myForm" action="" method="post" class="form-horizontal">
-        		<input type="hidden" name="Id" value="0">
+        		<input type="hidden" name="id" value="0">
+
         		<div class="form-group ">
         			<label for="name" class="label-control col-md-4">Heroes Name</label>
         			<div class="col-md-8">
@@ -91,7 +92,7 @@
 		$('#btnAdd').click(function(){
 			$('#myModal').modal('show');
 			$('#myModal').find('.modal-title').text('Add New Super Heroes');
-			$('#myForm').attr('action', '<?php echo base_url() ?>heroes/addHeroes');
+			$('#myForm').attr('action', '<?php echo base_url() ?>heroes/save');
 		});
 
 
@@ -103,34 +104,34 @@
 			var real_name = $('input[name=real_name]');
 			var umur = $('input[name=umur]');
 			var power = $('textarea[name=power]');
-			var result = '';
+			var result = true;
 
 			if(hero_name.val()==''){
 				hero_name.parent().parent().addClass('has-error');
+				result = false;
 			}else{
 				hero_name.parent().parent().removeClass('has-error');
-				result +='1';
 			}
 			if(real_name.val()==''){
 				real_name.parent().parent().addClass('has-error');
+				result = false;
 			}else{
 				real_name.parent().parent().removeClass('has-error');
-				result +='2';
 			}
 			if(umur.val()==''){
 				umur.parent().parent().addClass('has-error');
+				result = false;
 			}else{
 				umur.parent().parent().removeClass('has-error');
-				result +='3';
 			}
 			if(power.val()==''){
 				power.parent().parent().addClass('has-error');
+				result = false;
 			}else{
 				power.parent().parent().removeClass('has-error');
-				result +='4';
 			}
 
-			if(result=='1234'){
+			if(result){
 				$.ajax({
 					type: 'ajax',
 					method: 'post',
@@ -139,22 +140,21 @@
 					async: false,
 					dataType: 'json',
 					success: function(response){
-						if(response.success){
-							$('#myModal').modal('hide');
-							$('#myForm')[0].reset();
-							if(response.type=='add'){
-								var type = 'added'
-							}else if(response.type=='update'){
-								var type ="updated"
-							}
-							$('.alert-success').html('Heroes '+type+' successfully').fadeIn().delay(4000).fadeOut('slow');
-							showAllHeroes();
-						}else{
-							alert('Error');
+						$('#myModal').modal('hide');
+						$('#myForm')[0].reset();
+
+						if(response.type=='add'){
+							var type = 'added'
+						}else if(response.type=='update'){
+							var type ="updated"
 						}
+
+						$('.alert-success').html('Heroes '+type+' successfully').fadeIn().delay(4000).fadeOut('slow');
+
+						showAllHeroes();
 					},
-					error: function(){
-						alert('Could not add data');
+					error: function(jqXHR, textStatus, errorThrown){
+						alert(errorThrown);
 					}
 				});
 			}
@@ -162,6 +162,7 @@
 
 		//edit
 		$('#showdata').on('click', '.item-edit', function(){
+			
 			var id = $(this).attr('data');
 			$('#myModal').modal('show');
 			$('#myModal').find('.modal-title').text('Edit Employee');
@@ -185,18 +186,27 @@
 				}
 			});
 		});
-		//delete- 
+
+		//delete-
 		$('#showdata').on('click', '.item-delete', function(){
+
 			var id = $(this).attr('data');
+
 			$('#deleteModal').modal('show');
 			//prevent previous handler - unbind()
 			$('#btnDelete').unbind().click(function(){
 				$.ajax({
-					url: "<?php echo site_url('heroes/delete_hero') ;?>/"+id,
-					type: "POST",
-					dataType: "JSON",
-					success: function(data) {
-						location.reload();
+					type: 'ajax',
+					method: 'get',
+					async: false,
+					url: '<?php echo base_url() ?>heroes/delete_hero',
+					data:{id:id},
+					dataType: 'json',
+					success: function(response){
+
+						$('#deleteModal').modal('hide');
+						$('.alert-success').html('Heroes Deleted successfully').fadeIn().delay(4000).fadeOut('slow');
+						showAllHeroes();
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 					alert('Error Gagal Delete Data');
